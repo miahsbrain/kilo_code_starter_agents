@@ -1,0 +1,42 @@
+{
+  "name": "Secure Cline Architect Environment",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "root",
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind",
+    "source=secure-cline-vscode-data,target=/root/.vscode-server,type=volume"
+  ],
+  "runArgs": [
+    "--add-host=host.docker.internal:host-gateway"
+  ],
+  "postCreateCommand": "node --version && npm --version && python3 --version && docker --version",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "kilocode.Kilo-Code",
+        "ms-python.python"
+      ],
+      "settings": {
+        "extensions.autoUpdate": true
+      }
+    }
+  },
+  "forwardPorts": [
+    13100,
+    15273,
+    18100
+  ],
+  "portsAttributes": {
+    "13100": {
+      "label": "App alternate"
+    },
+    "15273": {
+      "label": "Frontend alternate"
+    },
+    "18100": {
+      "label": "Backend alternate"
+    }
+  }
+}
