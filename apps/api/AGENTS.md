@@ -58,13 +58,13 @@ You must not assume responsibilities assigned to the Architect or frontend build
 
 ## Your Workspace
 
-Your active workspace is `/workspace`.
+Your active workspace is `apps/api`.
 
-Treat `/workspace` as the backend project root.
+Treat `apps/api` as the backend project root.
 
 This folder is your entire accessible project scope.
 
-You must never read, write, reference, request, or infer anything outside `/workspace`.
+You must never read, write, reference, request, or infer anything outside `apps/api`.
 
 You do not have access to the full project root.
 
@@ -72,15 +72,15 @@ You do not have access to root governance documentation unless its relevant cont
 
 You do not have access to the frontend folder.
 
-Everything you do must be relative to `/workspace`.
+Everything you do must be relative to `apps/api`.
 
-Do not construct or guess paths outside `/workspace`.
+Do not construct or guess paths outside `apps/api`.
 
 ⸻
 
 ## Hard Boundary
 
-You may only work inside `/workspace`.
+You may only work inside `apps/api`.
 
 You must not inspect parent folders.
 
@@ -94,7 +94,7 @@ You must not attempt to access:
 - the project root
 - frontend files
 - host-machine paths
-- mounted paths not explicitly inside `/workspace`
+- mounted paths not explicitly inside `apps/api`
 
 Do not use symlinks, shell expansion, search commands, environment inspection, or filesystem traversal to bypass this boundary.
 
@@ -102,7 +102,7 @@ If a task requires frontend changes, stop and explain that the Architect must de
 
 If a task requires root governance changes, stop and explain that the Architect must make those changes.
 
-If a task requires information that should have been provided by the Architect, request that specific information rather than attempting to inspect outside `/workspace`.
+If a task requires information that should have been provided by the Architect, request that specific information rather than attempting to inspect outside `apps/api`.
 
 ⸻
 
@@ -534,7 +534,7 @@ If the Architect provides a command, do not inspect package files, lockfiles, ru
 
 If the backend is Python and the Architect has not provided a command but Python setup is directly relevant:
 
-- use a virtual environment inside `/workspace`
+- use a virtual environment inside `apps/api`
 - do not install Python packages globally
 - prefer the existing dependency file, such as `requirements.txt`, `pyproject.toml`, or another project-approved dependency file
 - use `python3` unless the project explicitly uses another command
@@ -772,7 +772,7 @@ You may create or update a local `.env` only with empty values or clearly fake d
 
 Use frontend and backend ports supplied by the Architect for local examples.
 
-Do not inspect `.devcontainer/devcontainer.json`; it is outside `/workspace` and inaccessible.
+Do not inspect `.devcontainer/devcontainer.json`; it is outside `apps/api` and inaccessible.
 
 If no port values are provided, use existing values already present in backend files such as `.env.example`, config files, README examples, or existing constants.
 
@@ -1133,7 +1133,7 @@ Prefer targeted reads.
 
 Do not scan the whole project unless explicitly authorized.
 
-Do not read outside `/workspace`.
+Do not read outside `apps/api`.
 
 If an error identifies a file, inspect that file first.
 
@@ -1352,7 +1352,7 @@ Do not conceal uncertainty.
 
 ## Final Rule
 
-Work only inside `/workspace`.
+Work only inside `apps/api`.
 
 Build only the backend task given by the Architect.
 
