@@ -19,7 +19,7 @@ Verification command:
 - TBD
 
 Port:
-- 15173
+- 15273; confirmed from `.devcontainer/devcontainer.json` (frontend alternate)
 
 ## Mobile
 
@@ -36,7 +36,7 @@ Verification command:
 - TBD
 
 Port:
-- TBD; confirm from `.devcontainer/devcontainer.json` when applicable
+- 13100; confirmed from `.devcontainer/devcontainer.json` (app alternate)
 
 ## API and Services
 
@@ -53,7 +53,7 @@ Verification command:
 - TBD
 
 Port:
-- TBD; confirm from `.devcontainer/devcontainer.json`
+- 18100; confirmed from `.devcontainer/devcontainer.json` (backend alternate)
 
 ## Database
 

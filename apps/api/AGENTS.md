@@ -87,8 +87,8 @@ You must not inspect parent folders.
 You must not attempt to access:
 
 - `..`
-- `../client`
-- `../server`
+- `../web`
+- `../mobile`
 - `../apps`
 - `../docs`
 - the project root
@@ -1183,6 +1183,8 @@ If you need an additional file, explain the evidence that makes it relevant.
 ## Testing and Verification Rules
 
 Match verification to the risk level of the change.
+
+When running tests, run only tests that are relevant to the build, the files you changed, or the services you worked on. Do not run unrelated tests, unrelated test subsets, or the full test suite for scoped changes unless the Architect explicitly asks or the change could affect application-wide behavior.
 
 Do not run expensive verification automatically for trivial changes.
 
