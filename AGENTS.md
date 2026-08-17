@@ -250,6 +250,31 @@ Use the simplest modular design that preserves meaningful boundaries.
 
 ---
 
+## Functional and Repository-Oriented Architecture Standard
+
+Prefer a functional core with a minimal imperative shell across all application layers.
+
+- Make domain calculations, validation, transformations, policy decisions, reducers, selectors, and use-case decisions pure whenever practical.
+- Pure functions must be deterministic: the same inputs produce the same outputs, with no hidden reads, writes, network calls, logging, timers, mutation of shared state, or dependence on ambient process state.
+- Treat I/O, persistence, network calls, filesystem access, time, randomness, framework lifecycle APIs, UI updates, analytics, and logging as explicit effects.
+- Keep effects at narrow, named boundaries such as route/handler adapters, repository adapters, integration clients, framework hooks, event handlers, and application entrypoints.
+- Orchestrators should be thin: receive dependencies and input, call pure domain functions, sequence the required effects, and return the result. They must not contain duplicated business rules or become an all-purpose service layer.
+- Prefer immutable inputs and outputs. Do not mutate caller-owned objects, shared collections, caches, or module-level state; return new values or explicit state transitions instead.
+- Pass dependencies explicitly rather than reading globals, environment variables, clocks, random generators, or service singletons from pure/domain functions.
+
+Organize code by repository/domain before organizing it by technical type.
+
+- A cohesive domain folder owns the domain model, CRUD/use cases, validation, serializers, domain-specific utilities, API or persistence adapters, state logic, components, and tests that exist only for that domain, following the selected layer’s conventions.
+- For example, code belonging only to `project` should live under the `project` repository/domain area, including project CRUD and project-specific helpers, rather than being scattered across global `models`, `services`, and `utils` folders.
+- Keep transport, persistence, framework, and external-provider details behind explicit adapters inside or adjacent to the owning domain; do not let them leak into pure domain functions.
+- Create a shared module only when its behavior is truly domain-neutral, independently reusable by multiple domains, and stable enough to justify coupling.
+- Do not extract domain-specific behavior into `common`, `helpers`, `misc`, or generic `utils` merely because it is used in more than one file.
+- Tests should live beside the repository/domain behavior they verify when the existing test tooling permits it. Cross-domain contract or integration tests may remain in the project test area.
+
+When reviewing work, reject hidden side effects in domain logic, broad orchestrators, duplicated domain behavior, and premature shared abstractions. Preserve framework-required effects, but make their boundary explicit and keep the functional core independently testable.
+
+---
+
 ## Architecture Quality Rule
 
 For every meaningful feature or architectural change, choose the approach that best serves the project’s approved goals rather than the approach that is fastest to implement.
@@ -667,6 +692,10 @@ Builder prompts must make clear that:
 - existing stack and project conventions must be followed
 - unnecessary complexity must not be introduced
 - security, reliability, maintainability, testability, observability, performance, and accessibility requirements must be preserved when applicable
+- functional core, imperative shell: keep domain logic pure and isolate required effects at explicit boundaries
+- organize implementation by cohesive repository/domain; keep each domain’s CRUD, model, validation, utilities, adapters, and tests together when they are domain-specific
+- extract shared code only when it is demonstrably domain-neutral and reused across independent domains
+- keep orchestrators thin and effect sequencing explicit; do not hide side effects in domain functions or scatter them across modules
 
 Do not paste the entire production or modularity standard into every prompt.
 
