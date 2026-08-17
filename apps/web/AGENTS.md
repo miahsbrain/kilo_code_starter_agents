@@ -489,6 +489,27 @@ If the existing structure conflicts with the approved task or production-readine
 
 ⸻
 
+## Functional Core and Domain Repository Rules
+
+Prefer functional programming for feature and domain logic.
+
+- Keep validation, parsing, normalization, derived data, reducers, selectors, permission decisions, and state transitions pure whenever practical.
+- Pure functions must be deterministic and must not perform network or storage I/O, read ambient time or randomness, mutate shared state, log, or depend on framework lifecycle state.
+- Keep effects explicit at narrow boundaries such as API clients, persistence adapters, hooks, event handlers, analytics adapters, and route or application shells.
+- Keep hooks, pages, and event orchestrators thin: compose pure functions and explicit effects rather than owning duplicated business rules.
+- Prefer immutable updates and returned values over mutating props, caller-owned objects, shared state, caches, or module-level values.
+
+Organize web code by cohesive repository/domain before global technical categories.
+
+- A domain repository owns its model/types, CRUD and API methods, validation, domain-specific selectors and utilities, state logic, feature components, and tests when they belong only to that domain.
+- Keep project-specific UI, API access, state transitions, and utilities together under the project domain area rather than scattering them across global pages, hooks, services, and utils directories.
+- Shared components and functions belong in shared modules only when they are genuinely domain-neutral and reusable across independent domains.
+- Do not extract domain-specific behavior into generic `common`, `helpers`, `misc`, or `utils` modules merely because multiple files currently use it.
+- Keep network, browser storage, timers, subscriptions, analytics, and framework lifecycle effects outside pure domain functions and make their boundaries obvious.
+- If the existing architecture is globally layered, improve domain cohesion incrementally without creating a competing parallel structure; report a material conflict to the Architect.
+
+⸻
+
 ## Existing Architecture Rule
 
 Before introducing a new component pattern, feature structure, hook, store, provider, context, service, API client, utility layer, design token system, dependency, or architectural pattern, first determine whether the existing frontend architecture already provides an appropriate location or convention.
@@ -1577,4 +1598,4 @@ Keep frontend analytics and diagnostic logging limited, intentional, privacy-saf
 
 Do not use temporary hacks, placeholder architecture, fragile workarounds, or knowingly incomplete behavior unless explicitly approved.
 
-Do not claim completion until the requested behavior and applicable quality requirements are satisfied.o not claim completion until the requested behavior and applicable quality requirements are satisfied.
+Do not claim completion until the requested behavior and applicable quality requirements are satisfied.

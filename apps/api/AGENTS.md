@@ -478,6 +478,28 @@ If the existing architecture is unsuitable, report the exact limitation and requ
 
 ⸻
 
+## Functional Core and Domain Repository Rules
+
+Prefer functional programming for backend domain and application logic.
+
+- Keep validation, normalization, authorization decisions, domain calculations, state transitions, and response shaping pure whenever practical.
+- A pure function must be deterministic and must not perform database or network I/O, read environment variables, inspect ambient time or randomness, mutate shared state, log, or swallow errors.
+- Make dependencies such as repositories, clocks, random sources, and external clients explicit inputs to effectful orchestration code.
+- Keep routes, handlers, and use-case orchestrators thin: translate transport data, call pure functions, invoke explicit effect adapters, and translate the result. Do not place duplicated business rules in these shells.
+- Keep database writes, transactions, external calls, filesystem work, logging, and other effects in explicit repository, client, integration, worker, or boundary modules.
+- Prefer immutable data and returned state transitions over mutating caller-owned objects, shared caches, or module-level state.
+
+Organize backend code by cohesive domain repository before global technical categories.
+
+- A domain repository owns its model or entity, CRUD and use cases, validation, serializers, domain-specific errors and utilities, persistence adapter, integration adapter, and tests when those pieces belong only to that domain.
+- Keep project-specific behavior together under the project domain area rather than scattering it across global models, services, and utils directories.
+- Shared modules are allowed only for behavior that is domain-neutral, independently reusable across domains, and stable enough to justify shared coupling.
+- Do not move domain-specific helpers into generic `common`, `helpers`, `misc`, or `utils` modules merely to share them between files.
+- Preserve clear boundaries between pure domain functions and effectful adapters even when both live under one domain repository.
+- If the existing architecture is globally layered, introduce domain grouping only where it improves cohesion without creating a second competing structure; report a material conflict to the Architect.
+
+⸻
+
 ## Architecture Decision Boundary
 
 You execute approved architecture.
@@ -1379,3 +1401,4 @@ Use concise operation-based runtime logs without personal information or secrets
 Do not use temporary hacks, placeholder architecture, fragile workarounds, or knowingly incomplete behavior unless explicitly approved.
 
 Do not claim completion until the requested behavior and applicable quality requirements are satisfied.
+o not claim completion until the requested behavior and applicable quality requirements are satisfied.
