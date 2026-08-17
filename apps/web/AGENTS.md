@@ -61,13 +61,13 @@ You must not assume responsibilities assigned to the Architect or backend builde
 
 ## Your Workspace
 
-Your active workspace is `/workspace`.
+Your active workspace is `apps/web`.
 
-Treat `/workspace` as the frontend project root.
+Treat `apps/web` as the frontend project root.
 
 This folder is your entire accessible project scope.
 
-You must never read, write, reference, request, or infer anything outside `/workspace`.
+You must never read, write, reference, request, or infer anything outside `apps/web`.
 
 You do not have access to the full project root.
 
@@ -75,29 +75,29 @@ You do not have access to root governance documentation unless its relevant cont
 
 You do not have access to the backend folder.
 
-Everything you do must be relative to `/workspace`.
+Everything you do must be relative to `apps/web`.
 
-Do not construct or guess paths outside `/workspace`.
+Do not construct or guess paths outside `apps/web`.
 
 ⸻
 
 ## Hard Boundary
 
-You may only work inside `/workspace`.
+You may only work inside `apps/web`.
 
 You must not inspect parent folders.
 
 You must not attempt to access:
 
 - `..`
-- `../client`
-- `../server`
+- `../api`
+- `../mobile`
 - `../apps`
 - `../docs`
 - the project root
 - backend files
 - host-machine paths
-- mounted paths not explicitly inside `/workspace`
+- mounted paths not explicitly inside `apps/web`
 
 Do not use symlinks, shell expansion, search commands, environment inspection, or filesystem traversal to bypass this boundary.
 
@@ -105,7 +105,7 @@ If a task requires backend changes, stop and explain that the Architect must del
 
 If a task requires root governance changes, stop and explain that the Architect must make those changes.
 
-If a task requires information that should have been provided by the Architect, request that specific information rather than attempting to inspect outside `/workspace`.
+If a task requires information that should have been provided by the Architect, request that specific information rather than attempting to inspect outside `apps/web`.
 
 ⸻
 
@@ -805,9 +805,9 @@ Do not modify the reference file.
 
 Do not inspect parent folders to locate reference files.
 
-If the reference is a local path, it must be inside `/workspace`.
+If the reference is a local path, it must be inside `apps/web`.
 
-If the reference is missing or inaccessible, stop and report that the Architect must provide an accessible file inside `/workspace` or a usable URL.
+If the reference is missing or inaccessible, stop and report that the Architect must provide an accessible file inside `apps/web` or a usable URL.
 
 Use reference files only for frontend or UI work.
 
@@ -837,7 +837,7 @@ If no convention exists and a new variable is required, ask the Architect for th
 
 Use the backend or API port supplied by the Architect for local examples.
 
-Do not inspect `.devcontainer/devcontainer.json`; it is outside `/workspace` and inaccessible.
+Do not inspect `.devcontainer/devcontainer.json`; it is outside `apps/web` and inaccessible.
 
 If no backend or API port is provided, use existing values already present in frontend files such as `.env.example`, API client config, README examples, or existing constants.
 
@@ -1314,7 +1314,7 @@ Prefer targeted reads.
 
 Do not scan the whole project unless explicitly authorized.
 
-Do not read outside `/workspace`.
+Do not read outside `apps/web`.
 
 If an error identifies a file, inspect that file first.
 
@@ -1343,6 +1343,8 @@ If you need an additional file, explain the evidence that makes it relevant.
 ## Testing and Verification Rules
 
 Match verification to the risk level of the change.
+
+When running tests, run only tests that are relevant to the build, the files you changed, or the services you worked on. Do not run unrelated tests, unrelated test subsets, or the full test suite for scoped changes unless the Architect explicitly asks or the change could affect application-wide behavior.
 
 Do not run expensive verification automatically for trivial changes.
 
@@ -1551,7 +1553,7 @@ Do not conceal uncertainty.
 
 ## Final Rule
 
-Work only inside `/workspace`.
+Work only inside `apps/web`.
 
 Build only the frontend task given by the Architect.
 
