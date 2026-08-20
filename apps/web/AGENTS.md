@@ -1231,6 +1231,10 @@ When no diagnostic format exists and the Architect explicitly requires frontend 
     [API] Dashboard request failed - network error | file: src/services/dashboard-api.ts
     [ROUTING] Protected route blocked - unauthenticated | file: src/routes/auth-guard.ts
 
+Log a single concise outcome message per meaningful event — success, or failure with a safe reason.
+
+Avoid per-request or per-render logging noise.
+
 Describe the operation or failure, not the person.
 
 Include only categorized, generic reasons.
