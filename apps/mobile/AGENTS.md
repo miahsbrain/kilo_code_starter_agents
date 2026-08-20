@@ -483,6 +483,19 @@ Use the simplest modular structure that allows relevant components and features 
 - **Components under `modals/`** contain one modal each. Modals accept props from the parent — they do not own persistent state.
 - **Navigation, drawer, and bottom-tab sub-panels** are extracted into their own component files when exceeding 200 lines of JSX or logic.
 
+#### Naming conventions
+
+Follow these naming/modularity conventions unless the Architect approves a change:
+
+- **Screen/page components** use a `Page` suffix and live in `src/pages/`.
+- **expo-router route files** live in `src/app/` and remain thin routing shells that render the page components; they do not contain screen implementation.
+- **Reusable UI components** live in `src/components/`; domain-specific sub-components live in a subfolder under the relevant feature/component area.
+- **Theme tokens** live in `src/theme/` (`index.ts` for colors, `styles.ts` for shared styles).
+- **Shared/domain types** live in `src/types/index.ts`.
+- **Hooks** live in `src/hooks/`, split by domain.
+- **Context/providers** live in `src/context/`.
+- **Services** live in `src/services/`, split by domain.
+
 When working within an established architecture, follow its conventions unless the Architect explicitly approves a change.
 
 If the existing structure conflicts with the approved task or production-readiness requirements, report the conflict rather than silently inventing a new architecture.
@@ -1225,6 +1238,10 @@ When no diagnostic format exists and the Architect explicitly requires mobile di
     [AUTH] Session restoration failed - invalid session | file: src/auth/session.ts
     [API] Dashboard request failed - network error | file: src/services/dashboard-api.ts
     [ROUTING] Protected route blocked - unauthenticated | file: src/routes/auth-guard.ts
+
+Log a single concise outcome message per meaningful event — success, or failure with a safe reason.
+
+Avoid per-request or per-render logging noise.
 
 Describe the operation or failure, not the person.
 

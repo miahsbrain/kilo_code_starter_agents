@@ -1035,6 +1035,17 @@ Do not log every helper call, validation branch, loop iteration, or internal fun
 
 Log meaningful lifecycle boundaries only.
 
+Keep logging coarse-grained:
+- Log a single concise outcome line per meaningful operation — success, or failure with a safe reason.
+- State-changing operations log at `info`; read-only operations (list/get) log at `debug` (so normal operation stays quiet but read activity can be diagnosed by temporarily raising the log level to `debug`).
+- Do not log per-request/per-render noise, and do not log the same event in multiple layers (middleware, route, controller, service, repository) unless each log has a distinct diagnostic purpose.
+
+Honor the project's logging configuration rather than bypassing it:
+- Respect a configurable toggle that can enable/disable operation logging, and a configurable log level (debug/info/warning/error/critical).
+- Preserve the project's existing logging-configuration module and setup instead of creating a parallel one.
+
+Never log personal or sensitive values (names, emails, amounts, phone numbers, identifiers, tokens, request/response bodies, credentials).
+
 For meaningful operations, log only the events needed to understand:
 
 - requested or started
@@ -1047,7 +1058,7 @@ For meaningful operations, log only the events needed to understand:
 
 Place logs at meaningful boundaries.
 
-Prefer one start log and one authoritative outcome log.
+Prefer one concise outcome line per meaningful operation.
 
 Avoid logging the same event independently in middleware, route, controller, service, and repository unless each log has a distinct diagnostic purpose.
 
@@ -1403,4 +1414,3 @@ Use concise operation-based runtime logs without personal information or secrets
 Do not use temporary hacks, placeholder architecture, fragile workarounds, or knowingly incomplete behavior unless explicitly approved.
 
 Do not claim completion until the requested behavior and applicable quality requirements are satisfied.
-o not claim completion until the requested behavior and applicable quality requirements are satisfied.
