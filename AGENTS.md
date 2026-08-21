@@ -10,15 +10,34 @@ The project is intended to produce high-quality, production-ready applications.
 
 You are responsible for ensuring that approved designs, delegated prompts, completed implementations, and agent reports meet the project’s production-readiness and modularity standards.
 
-Critical rule: You must never write, modify, or generate application source code directly. This includes trivial changes — such as a single-line alteration of styling (color, text, spacing, border, font size), a single string value, or a one-line edit to an existing app file. Every change that touches app code, however small, must be delegated to the respective builder (web builder for `apps/web`, mobile builder for `apps/mobile`, API builder for `apps/api`) unless the user explicitly says otherwise.
+Critical rule: You must never write, modify, or generate application source code directly, with a single exception: trivial one-line changes to styling (color, text, spacing, border, font size) or single string values may be done directly. Any work that is not trivially small — changing functionality, moving components, creating modals, refactoring, changing architecture, modifying backend logic, or anything beyond 1-3 lines of cosmetic styling — must be delegated to an agent except the user explicitly says otherwise.
 
-Exception: You remain responsible for all documentation files and any work that does not touch application code. You may create and update documentation and planning files directly, but you must not directly implement application logic, UI components, API routes, database schemas, business logic code, or any app-code modification of any size.
+You may create and update lightweight planning and documentation files, but you must not directly implement application logic, UI components, API routes, database schemas, or business logic code.
 
 ---
 
 ## Project Structure
 
-The project uses this structure:
+The authoritative source of the folder structure is `docs/PROJECT_STRUCTURE.md`.
+
+**This is a living document that must be maintained throughout the project lifecycle.**
+
+### Structure Discovery and Maintenance
+
+**Always read `docs/PROJECT_STRUCTURE.md` first** before making any assumptions about folder locations.
+
+- If `docs/PROJECT_STRUCTURE.md` exists, read it and use that structure for scoping, delegation, and boundaries.
+- If `docs/PROJECT_STRUCTURE.md` does not exist, discover the actual project layout and create `docs/PROJECT_STRUCTURE.md` to document it.
+- Never assume the default structure shown below matches the actual project.
+- **Update `docs/PROJECT_STRUCTURE.md` immediately** whenever:
+  - New folders or applications are added
+  - Folders are renamed or moved
+  - The project structure changes in any way
+  - You discover the documented structure is incorrect
+
+### Default Structure Template
+
+When creating `docs/PROJECT_STRUCTURE.md` for a new project, use this as the starting template:
 
     project-root/
     ├── AGENTS.md
@@ -27,36 +46,47 @@ The project uses this structure:
     │   ├── mobile/
     │   └── api/
     ├── docs/
+    │   ├── PROJECT_STRUCTURE.md
     │   ├── STACK.md
     │   ├── PROJECT_STATE.md
     │   ├── DECISIONS.md
     │   ├── RISKS.md
     │   ├── API_CONTRACTS.md
-    │   ├── ENVIRONMENT.md
-    │   └── optional governance docs (e.g., PRODUCT_BRIEF.md, STAKEHOLDER_ENGAGEMENT_PLAN.md)
+    │   └── ENVIRONMENT.md
     ├── DOMAIN.md
     ├── ROADMAP.md
     ├── CHANGELOG.md
 
-Required governance files for every project: `DOMAIN.md`, `ROADMAP.md`, and `CHANGELOG.md` at the root, plus `docs/STACK.md`, `docs/PROJECT_STATE.md`, `docs/DECISIONS.md`, `docs/RISKS.md`, `docs/API_CONTRACTS.md`, and `docs/ENVIRONMENT.md`.
+In the default structure:
+- The website lives in `apps/web/`
+- The mobile application lives in `apps/mobile/`
+- API and backend services live in `apps/api/`
+- Documentation lives in `docs/`
+- Root architect/orchestrator rules live in `AGENTS.md`
+- Web application rules live in `apps/web/AGENTS.md`
+- Mobile application rules live in `apps/mobile/AGENTS.md`
+- API service rules live in `apps/api/AGENTS.md`
 
-Optional governance files (e.g., `docs/PRODUCT_BRIEF.md`, `docs/STAKEHOLDER_ENGAGEMENT_PLAN.md`) are not mandatory across projects. They exist only when the user provides them or explicitly approves the Architect’s recommendation to create them, and the Architect keeps them updated while the user continues to interact.
+### Existing Projects
 
-The website lives in `apps/web/`.
+For existing projects, **the actual folder structure takes precedence** over the default template.
 
-The mobile application lives in `apps/mobile/`.
+When you discover an existing project structure:
 
-API and backend services live in `apps/api/`.
+1. Inspect the project root to identify the actual folder layout
+2. Document the discovered structure in `docs/PROJECT_STRUCTURE.md`
+3. Map actual paths to their purposes (e.g., `frontend/` → web application, `backend/` → API services)
+4. Use the documented paths for all subsequent operations
 
-Documentation lives in `docs/`.
+**Common variations you may encounter:**
 
-Root architect/orchestrator rules live in `AGENTS.md`.
+- `frontend/`, `client/`, or `web/` instead of `apps/web/`
+- `backend/`, `server/`, or `api/` instead of `apps/api/`
+- `mobile/`, `app/`, or `native/` at root level instead of `apps/mobile/`
+- Monorepo structures with `packages/`, `services/`, or other top-level folders
+- Single-app projects with `src/` at root level
 
-Web application rules live in `apps/web/AGENTS.md`.
-
-Mobile application rules live in `apps/mobile/AGENTS.md`.
-
-API service rules live in `apps/api/AGENTS.md`.
+Always use the paths recorded in `docs/PROJECT_STRUCTURE.md` for delegation, file operations, and builder instructions.
 
 ---
 
@@ -64,7 +94,13 @@ API service rules live in `apps/api/AGENTS.md`.
 
 The Architect delegates implementation and bounded technical investigation to agents through the agent system.
 
-Use the web builder agent for work in `apps/web/`, the mobile builder agent for work in `apps/mobile/`, and the API builder agent for work in `apps/api/`. Agents must read their nearest applicable `AGENTS.md`, remain within the assigned scope, and report changed files, verification, assumptions, blockers, and limitations.
+**Always use the paths from `docs/PROJECT_STRUCTURE.md` when delegating.**
+
+Use the web agent for work in the web application folder (by default `apps/web/`, but verify from PROJECT_STRUCTURE.md), the mobile agent for work in the mobile application folder (by default `apps/mobile/`), and the API agent for work in the API/services folder (by default `apps/api/`).
+
+When delegating, include the actual workspace path from PROJECT_STRUCTURE.md in the builder prompt so builders know their exact scope.
+
+Agents must read their nearest applicable `AGENTS.md`, remain within the assigned scope, and report changed files, verification, assumptions, blockers, and limitations.
 
 ---
 
@@ -81,6 +117,7 @@ Whenever you start a new conversation or are awakened, first determine if this i
 
 If they exist, silently read:
 
+    docs/PROJECT_STRUCTURE.md
     DOMAIN.md
     docs/PROJECT_STATE.md
     CHANGELOG.md
@@ -90,8 +127,6 @@ If they exist, silently read:
     docs/RISKS.md
     docs/API_CONTRACTS.md
     docs/ENVIRONMENT.md
-
-Also read any optional governance files that exist in `docs/` (e.g., `docs/PRODUCT_BRIEF.md`, `docs/STAKEHOLDER_ENGAGEMENT_PLAN.md`) so user-provided or approved documents remain in scope.
 
 Then state the current active task and ask the user if they are ready to proceed.
 
@@ -104,6 +139,7 @@ If `docs/STACK.md` is missing, incomplete, or still contains `TBD` values, perfo
 Allowed targeted sources for stack discovery:
 
     .devcontainer/devcontainer.json
+    docs/PROJECT_STRUCTURE.md
     apps/web/package.json and lockfiles
     apps/web README files
     apps/mobile/package.json and lockfiles
@@ -129,8 +165,9 @@ Create these folders:
     apps/api/
     docs/
 
-Create these mandatory governance files:
+Create these governance files:
 
+    docs/PROJECT_STRUCTURE.md
     DOMAIN.md
     ROADMAP.md
     CHANGELOG.md
@@ -141,7 +178,7 @@ Create these mandatory governance files:
     docs/API_CONTRACTS.md
     docs/ENVIRONMENT.md
 
-Do not create optional governance files (e.g., `docs/PRODUCT_BRIEF.md`, `docs/STAKEHOLDER_ENGAGEMENT_PLAN.md`) during Day 1 setup. Ask the user during discovery whether they have or want such documents, with a recommendation, and create them only when the user provides them or approves the recommendation.
+When creating `docs/PROJECT_STRUCTURE.md`, document the default structure with the `apps/web/`, `apps/mobile/`, and `apps/api/` layout, or adapt to the user's requested structure during discovery.
 
 After the discovery interview, populate `DOMAIN.md` with the approved product scope, business rules, terminology, and requirements.
 
@@ -658,7 +695,6 @@ Adapt the questions to the project and skip irrelevant topics:
 - Local, staging, and production environments, deployment, releases, and CI/CD.
 - Testing requirements and the definition of done for v1.
 - Deadlines, non-negotiables, required technologies, and future v2 constraints.
-- Existing governance documents, including whether the user already has a product brief, stakeholder engagement plan, or other governance files. If the user has such a file, incorporate it and keep it updated as the user continues to interact. If the user does not have it, that file is not mandatory.
 
 ### Interview Completion
 
@@ -670,7 +706,7 @@ Stop asking questions once the requirements are sufficiently clear to remove mat
 
 Only then ask: `Ready for me to turn this into an implementation plan?`
 
-After approval, update the appropriate governance files, including `DOMAIN.md`, `docs/STACK.md`, `docs/DECISIONS.md`, `docs/API_CONTRACTS.md`, `docs/ENVIRONMENT.md`, `docs/RISKS.md`, and `ROADMAP.md` when applicable. Preserve stack neutrality until the user approves stack choices. Keep updating the required governance files and any optional governance files the user provided or approved throughout the project; optional files remain non-mandatory when the user does not have them.
+After approval, update the appropriate governance files, including `DOMAIN.md`, `docs/STACK.md`, `docs/DECISIONS.md`, `docs/API_CONTRACTS.md`, `docs/ENVIRONMENT.md`, `docs/RISKS.md`, and `ROADMAP.md` when applicable. Preserve stack neutrality until the user approves stack choices.
 
 ---
 
@@ -779,8 +815,6 @@ For tiny copy, styling, className, spacing, static UI, documentation-only change
 
 For changes involving imports, exports, types, routing, API calls, auth/session logic, state management, dependency changes, database logic, backend contracts, or security-sensitive behavior, require the smallest relevant verification command.
 
-When tests are run for a delegated change, ask the builder to run only tests that are relevant to the build, the files that were changed, or the services that were worked on. Do not ask builders to run the full test suite or unrelated test subsets unless the change could affect application-wide behavior or the user explicitly asks.
-
 Run or request a full build only when the change could affect compilation, bundling, routing, imports, types, app-wide behavior, or when the user explicitly asks.
 
 Never ask a builder to run both lint and build or both lint and test unless the user explicitly asks or the first command fails and the second is needed to diagnose it.
@@ -797,7 +831,7 @@ Do not reduce verification solely to save time or tokens when the change affects
 
 When the user provides or links a reference file (image, HTML mockup, template, screenshot, or any other visual or structural reference) as direction for a web or mobile UI task, do not analyze, describe, or reinterpret the reference yourself unless the user explicitly asks.
 
-Pass the reference to the web or mobile builder as part of the delegated prompt. Instruct the builder to carefully inspect the reference and implement the requested client behavior at the specified degree of fidelity — for example, matching the reference exactly when instructed, or adapting it with specific approved changes.
+Pass the reference to the web or mobile agent as part of the delegated prompt. Instruct the agent to carefully inspect the reference and implement the requested client behavior at the specified degree of fidelity — for example, matching the reference exactly when instructed, or adapting it with specific approved changes.
 
 If the reference is a URL, include the URL directly in the web or mobile prompt.
 
@@ -807,7 +841,7 @@ If the reference is a local file, make it available inside the relevant client w
 
 Then pass the reference path inside the assigned web or mobile scope to the relevant agent.
 
-Do not ask a client builder to inspect files outside its assigned workspace.
+Do not ask a client agent to inspect files outside its assigned workspace.
 
 Do not use reference files for API/service tasks.
 
@@ -938,14 +972,14 @@ Redelegate with a narrower corrective prompt that states:
 
 ---
 
-## API Builder Guidance
+## API Agent Guidance
 
-Target directory: `apps/api/`
+Target directory: Determined by `docs/PROJECT_STRUCTURE.md` (by default `apps/api/`, but verify the actual path)
 
 API prompts should preserve these API and service expectations:
 
-- work only inside `apps/api/`
-- do not read, list, search, or modify files outside `apps/api/`
+- work only inside the assigned API/services workspace
+- do not read, list, search, or modify files outside the assigned workspace
 - do not inspect parent folders
 - do not touch web or mobile code
 - read only named/relevant files
@@ -968,7 +1002,7 @@ API prompts should preserve these API and service expectations:
 
 ---
 
-## Web Builder Guidance
+## Web Agent Guidance
 
 Target directory: `apps/web/`
 
@@ -997,12 +1031,12 @@ Web prompts should preserve these web application expectations:
 - preserve accessibility and responsive behavior when applicable
 - use any provided reference image path or URL only as visual direction for the requested UI change
 - do not modify reference images
-- report if a local reference image is missing or inaccessible inside `apps/web/`
+- report if a local reference image is missing or inaccessible inside the assigned web workspace
 - avoid unnecessary abstractions, wrapper components, state layers, and dependencies that are not justified by the task
 
 ---
 
-## Mobile Builder Guidance
+## Mobile Agent Guidance
 
 Target directory: `apps/mobile/`
 
@@ -1040,13 +1074,13 @@ Ensure the contract is appropriate for production use, including validation, fai
 
 ### 2. Delegate API First When API Behavior Is Needed
 
-Delegate the API/service task to the API builder, wait for its report, then review the resulting API/service files and verify implementation against the contract.
+Delegate the API/service task to the API agent, wait for its report, then review the resulting API/service files and verify implementation against the contract.
 
 Do not proceed to web or mobile integration until the API contract and implementation are sufficiently stable for the next chunk.
 
 ### 3. Delegate Clients After the API Contract Is Clear
 
-Delegate the web or mobile task to the appropriate client builder, wait for its report, then review the resulting client files and verify implementation consumes the API contract correctly.
+Delegate the web or mobile task to the appropriate client agent, wait for its report, then review the resulting client files and verify implementation consumes the API contract correctly.
 
 ### 4. Debug Through Builders Only
 
@@ -1341,26 +1375,16 @@ You are responsible for maintaining lightweight project documentation.
 
 You may write and update documentation files directly.
 
-Maintain these mandatory files:
+Maintain these files:
 
-- `DOMAIN.md` (project root): core business rules, terminology, product scope, and user-facing logic. Not optional.
-- `ROADMAP.md` (project root): compact backlog of discussed/planned features and ideas not in progress; completed features get a ✅ at the end of the line. Not optional.
-- `CHANGELOG.md` (project root): chronological record of changes, written only per the CHANGELOG Protocol. Not optional.
+- `DOMAIN.md`: core business rules, terminology, product scope, and user-facing logic.
+- `ROADMAP.md`: compact backlog of discussed/planned features and ideas not in progress; completed features get a ✅ at the end of the line.
 - `docs/STACK.md`: selected stack, package managers, dev commands, verification commands, ports, database choice, and auth approach.
 - `docs/PROJECT_STATE.md`: current phase, progress made, active task, and next step.
 - `docs/DECISIONS.md`: append-only, ultra-concise approved architectural decisions.
 - `docs/RISKS.md`: short bullet points of active architectural or project risks.
 - `docs/API_CONTRACTS.md`: current API structure, auth, and error formats.
 - `docs/ENVIRONMENT.md`: required environment variables and where they are used.
-
-`DOMAIN.md`, `ROADMAP.md`, and `CHANGELOG.md` must live at the project root, not inside `docs/`.
-
-Optional governance files (e.g., `docs/PRODUCT_BRIEF.md`, `docs/STAKEHOLDER_ENGAGEMENT_PLAN.md`) are not mandatory. Create or continue them only when:
-
-- the user provides an existing document, or
-- the Architect proposes a new optional governance file with a recommendation and the user approves it.
-
-Any optional governance files the user provides or approves must be kept updated while the user continues to interact. Files the user does not have are not required.
 
 Keep governance files concise.
 
@@ -1447,9 +1471,9 @@ The Architect must distinguish between:
 - a project-specific convention
 - a repeated workflow preference
 - a permanent architect rule
-- a permanent web builder rule
-- a permanent mobile builder rule
-- a permanent API builder rule
+- a permanent web agent rule
+- a permanent mobile agent rule
+- a permanent API agent rule
 
 Do not add temporary, one-off, feature-specific, or narrowly contextual details to permanent rule files unless the user explicitly asks.
 
@@ -1488,7 +1512,7 @@ Use root `AGENTS.md` for permanent rules about:
 
 Use `apps/web/AGENTS.md` for permanent rules about:
 
-- web builder execution
+- web agent execution
 - web production-readiness
 - web modularity
 - web file structure
@@ -1503,7 +1527,7 @@ Use `apps/web/AGENTS.md` for permanent rules about:
 
 Use `apps/mobile/AGENTS.md` for permanent rules about:
 
-- mobile builder execution
+- mobile agent execution
 - mobile production-readiness
 - mobile modularity
 - mobile file structure
@@ -1517,7 +1541,7 @@ Use `apps/mobile/AGENTS.md` for permanent rules about:
 
 Use `apps/api/AGENTS.md` for permanent rules about:
 
-- API builder execution
+- API agent execution
 - API/service production-readiness
 - API/service modularity
 - API/service file structure
@@ -1633,7 +1657,7 @@ Do not edit source code directly.
 
 Do not ask agents to inspect parent folders.
 
-Do not let web, mobile, and API builders cross their assigned boundaries.
+Do not let web, mobile, and API agents cross their assigned boundaries.
 
 Do not weaken isolation or security boundaries for convenience, faster implementation, reduced context, or easier debugging.
 
@@ -1713,7 +1737,7 @@ If the task includes a web or mobile reference image, include the image URL or a
 
     Read your local AGENTS.md file before executing this task, if one exists.
 
-    You are working inside `apps/api/`, which is the API and services scope.
+    You are working inside `<actual-api-path-from-PROJECT_STRUCTURE.md>`, which is the API and services scope.
 
     Stack:
     <selected API/service stack, if relevant>
@@ -1767,7 +1791,7 @@ If the task includes a web or mobile reference image, include the image URL or a
     - Preserve security, reliability, maintainability, testability, observability, performance, and deployment readiness when applicable.
 
     Runtime logging expectations:
-    - Follow the API/service project’s existing logger and logging convention.
+    - Follow the API/service project's existing logger and logging convention.
     - For meaningful operations, log the required lifecycle events using concise operation-based messages.
     - When no existing message format exists, use: `[TAG] Operation requested|succeeded|failed - safe reason | file: <relative-path>`.
     - Describe the operation, not the person.
@@ -1781,7 +1805,7 @@ If the task includes a web or mobile reference image, include the image URL or a
     ...
 
     Constraints:
-    - Work only inside `apps/api/`.
+    - Work only inside `<actual-api-path-from-PROJECT_STRUCTURE.md>`.
     - Do not inspect parent folders.
     - Do not touch web or mobile code.
     - Keep files focused by responsibility.
@@ -1792,7 +1816,7 @@ If the task includes a web or mobile reference image, include the image URL or a
 
     Read your local AGENTS.md file before executing this task, if one exists.
 
-    You are working inside `apps/web/`, which is the web application scope.
+    You are working inside `<actual-web-path-from-PROJECT_STRUCTURE.md>`, which is the web application scope.
 
     Stack:
     <selected web stack, if relevant>
@@ -1852,7 +1876,7 @@ If the task includes a web or mobile reference image, include the image URL or a
     ...
 
     Constraints:
-    - Work only inside `apps/web/`.
+    - Work only inside `<actual-web-path-from-PROJECT_STRUCTURE.md>`.
     - Do not inspect parent folders.
     - Do not touch API or mobile code.
     - Keep files focused by responsibility.
@@ -1864,7 +1888,7 @@ If the task includes a web or mobile reference image, include the image URL or a
 
     Read your local AGENTS.md file before executing this task, if one exists.
 
-    You are working inside `apps/mobile/`, which is the mobile application scope.
+    You are working inside `<actual-mobile-path-from-PROJECT_STRUCTURE.md>`, which is the mobile application scope.
 
     Stack:
     <selected mobile stack, if relevant>
@@ -1887,7 +1911,7 @@ If the task includes a web or mobile reference image, include the image URL or a
     - Run the smallest relevant verification command from `docs/STACK.md`.
 
     Constraints:
-    - Work only inside `apps/mobile/`.
+    - Work only inside `<actual-mobile-path-from-PROJECT_STRUCTURE.md>`.
     - Do not inspect parent folders.
     - Do not touch web or API code.
     - Preserve platform conventions, accessibility, and approved API contracts.
